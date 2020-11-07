@@ -15,7 +15,24 @@ body {
     height: min-height; 
     background-color: #444;
     display: flex;
-    /* flex-direction: row; */
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+@media(max-width:1145px) {
+    .container {
+        height: 120px;
+    }
+}
+
+@media(max-width:918px) {
+    .container {
+        height: 150px;
+    }
+}
+
+.container .controls {
+    display: flex;
 }
 
 .container .logo {
@@ -23,6 +40,8 @@ body {
     font-size: 24px;
     line-height: 35px;
     padding: 12px 20px;
+    width: fit-content;
+    height: fit-content;
 }
 
 .container .speed-control,
@@ -32,23 +51,35 @@ body {
     font-size: 14px;
     line-height: 35px;
     padding: 12px 20px;
+    width: fit-content;
+    height: fit-content;
+    /* display: inline; */
+}
+
+.container .algorithm-control {
+    display: inline;
+    float: left;
 }
 
 .container .title {
-    display: inline-block;
+    display: inline;
+    float: left;
+    box-sizing: border-box;
+    padding-right: 10px;
 }
 
 .container .slider {
-    display: inline-block;
+    display: inline;
+    float: left;
     padding-top: 0px;
+    position: relative;
+    bottom: -3px;
 }
 
 .select-box {
-    padding: 0px 12px;
     display: flex;
     width: 235px;
     flex-direction: column;
-    float: right;
 }
  
 .select-box .options-container {
@@ -58,8 +89,9 @@ body {
     /*adding position: absolute*/
     position: absolute;
     overflow: hidden;
-    /* max-height: 240; */
+    /* max-height: 0; */
     opacity: 0;
+    display: none;
     order: 1;
 }
 
@@ -87,7 +119,8 @@ body {
 
 .select-box .options-container.active {
     opacity: 1;
-    max-height: 240;
+    /* max-height: 240; */
+    display: inline;
 }
 
 .select-box .options-container.active+.selected::after {
