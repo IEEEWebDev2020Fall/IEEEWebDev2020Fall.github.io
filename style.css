@@ -11,7 +11,8 @@ body {
 
 .container {
     width: 100%;
-    height: 60px;
+    /*height: 60px;*/
+    height: min-height; 
     background-color: #444;
     display: flex;
     /* flex-direction: row; */
@@ -49,11 +50,13 @@ body {
     flex-direction: column;
     float: right;
 }
-
+ 
 .select-box .options-container {
     background-color: gray;
     border-radius: 8px;
     transition: all 0.4s;
+    /*adding position: absolute*/
+    position: absolute;
     overflow: hidden;
     /* max-height: 240; */
     opacity: 0;
