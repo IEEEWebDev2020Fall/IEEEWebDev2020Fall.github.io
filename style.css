@@ -43,33 +43,32 @@ body {
     height: fit-content;
 }
 
-.container .speed-control,
-.size-control,
-.algorithm-control {
+.container .controls>* {
     color: white;
     font-size: 14px;
     line-height: 35px;
     padding: 12px 20px;
-    width: fit-content;
-    height: fit-content;
-    /* display: inline; */
+    /* width: fit-content; */
+    /* text-align: center; */
+    /* height: fit-content; */
+}
+
+.controls .title {
+    margin: auto;
 }
 
 .container .algorithm-control {
     display: inline;
-    float: left;
 }
 
 .container .title {
     display: inline;
-    float: left;
     box-sizing: border-box;
     padding-right: 10px;
 }
 
 .container .slider {
     display: inline;
-    float: left;
     padding-top: 0px;
     position: relative;
     bottom: -3px;
