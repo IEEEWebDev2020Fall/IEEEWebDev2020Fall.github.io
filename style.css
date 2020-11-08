@@ -1,38 +1,37 @@
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
+
+/* Page Defaults */
+
+html,
 body {
     background-color: #202020;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
 }
+
+
+/* Header */
 
 .container {
     width: 100%;
-    height: 60px;
+    /* height: 60px; */
     background-color: #444;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-@media(max-width:1145px) {
-    .container {
-        height: 120px;
+@media ( max-width: 768px) {
+    body {
+        font-size: 30px;
     }
 }
 
-@media(max-width:918px) {
-    .container {
-        height: 150px;
-    }
-}
 
-.container .controls {
-    display: flex;
-}
+/* Container Logo */
 
 .container .logo {
     color: white;
@@ -43,28 +42,22 @@ body {
     height: fit-content;
 }
 
+
+/* Container Controls */
+
+.container .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
 .container .controls>* {
+    display: block;
     color: white;
-    font-size: 14px;
+    font-size: 1rem;
     line-height: 35px;
-    padding: 12px 20px;
-    /* width: fit-content; */
-    /* text-align: center; */
-    /* height: fit-content; */
-}
-
-.controls .title {
-    margin: auto;
-}
-
-.container .algorithm-control {
-    display: inline;
-}
-
-.container .title {
-    display: inline;
-    box-sizing: border-box;
-    padding-right: 10px;
+    margin: 12px 20px;
+    text-align: center;
 }
 
 .container .slider {
@@ -74,20 +67,23 @@ body {
     bottom: -3px;
 }
 
+
+/* Dropdown Box */
+
 .select-box {
     display: flex;
     width: 235px;
     flex-direction: column;
+    position: relative;
 }
 
 .select-box .options-container {
     background-color: gray;
     border-radius: 8px;
+    position: absolute;
+    top: 100%;
+    width: 235px;
     transition: all 0.4s;
-    /*adding position: absolute*/
-    position: relative;
-    overflow: hidden;
-    /* max-height: 0; */
     opacity: 0;
     display: none;
     order: 1;
