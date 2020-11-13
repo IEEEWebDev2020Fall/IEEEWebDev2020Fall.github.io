@@ -8,22 +8,24 @@
 html,
 body {
     /*background-color: #202020;*/
-    background: radial-gradient(#ffffff, #7c8da2);
+    /*background: radial-gradient(#ffffff, #7c8da2);*/
+    background-color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
+    height:100%
 }
 
 
 /* Header */
 
 .container {
-    width: 100%;
+    width: auto;
     /* height: 60px; */
-    background-color:#444;
-    /*background-color: radial-gradient(#ffffff, black);*/
+    /*background-color: rgb(180, 228, 240);*/
+    background: radial-gradient(#ffffff, #abe4ff);
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 @media ( max-width: 768px) {
@@ -36,7 +38,7 @@ body {
 /* Container Logo */
 
 .container .logo {
-    color: white;
+    color: black;
     font-size: 24px;
     line-height: 35px;
     padding: 12px 20px;
@@ -49,13 +51,13 @@ body {
 
 .container .controls {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-around;
 }
 
 .container .controls>* {
     display: block;
-    color: white;
+    color: black;
     font-size: 1rem;
     line-height: 35px;
     margin: 12px 20px;
@@ -63,7 +65,7 @@ body {
 }
 
 .container .slider {
-    display: inline;
+    display: inline-block;
     padding-top: 0px;
     position: relative;
     bottom: -3px;
@@ -144,12 +146,19 @@ body {
 
 .btn {
     border:0;
-    padding: 8px;
+    padding: 7px;
     border-radius: 8px;
     color: white;
     background-color: gray;
-    margin: 50px;
+    margin: 46px;
     min-width: 160px;
     font-size: 16px;
-    min-height: auto;
+    max-height: 30px;
+}
+
+.logoGif {
+    width: 120px;
+    height: auto;
+    position: relative;
+    top: 10px
 }
