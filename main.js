@@ -14,17 +14,22 @@ function randomNumArray(min, max){
 
 }
 
-function setUp(){
-    var x = document.getElementById("myRange").value;
+function setUp(x){
+    x = document.getElementById("myRange").value;
     document.getElementById("demo").innerHTML = x;
+    
     const array = [];
     for (let i = 0; i < x; i++){
         array.push(randomNumArray(5,10))
     }
+    
     return array;
 }
 
+
+
 document.getElementById("demo").innerHTML = setUp();
+
 
 
 
