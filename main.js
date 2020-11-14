@@ -26,6 +26,12 @@ function setUp(x){
     return array;
 }
 
+function numOfBars(){
+    x = document.getElementById("myRange").value;
+    document.getElementById("demo").innerHTML = x;
+    document.getElementById("bars").innerHTML = bars;
+
+}
 
 
 document.getElementById("demo").innerHTML = setUp();

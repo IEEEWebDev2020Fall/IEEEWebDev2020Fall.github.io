@@ -166,8 +166,20 @@ body {
 }
 
 .arrayContainer{
-    position: absolute;
-    left: 100px;
+    width: 600px;
+    margin: 100px auto;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.barContainer{
+
+    width: 500px;
+    height: 400px ;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px #000;
 }
 
 .bars{
