@@ -6,13 +6,25 @@ selected.addEventListener("click", () => {
     optionsContainer.classList.toggle("active")
 })
 
-var randomArray = [];
+
 
 function randomNumArray(min, max){
-    return Math.floor(Math.random() * (max - min + 1) + min);
+
+    return (Math.floor(Math.random() * (max - min + 1) + min));
 
 }
 
-function test(){
-    console.log("hi");
+function setUp(){
+    var x = document.getElementById("myRange").value;
+    document.getElementById("demo").innerHTML = x;
+    const array = [];
+    for (let i = 0; i < x; i++){
+        array.push(randomNumArray(5,10))
+    }
+    return array;
 }
+
+document.getElementById("demo").innerHTML = setUp();
+
+
+
