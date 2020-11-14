@@ -16,20 +16,22 @@ function randomNumArray(min, max){
 
 function setUp(x){
     x = document.getElementById("myRange").value;
-    document.getElementById("demo").innerHTML = x;
+    
     
     const array = [];
     for (let i = 0; i < x; i++){
         array.push(randomNumArray(5,10))
     }
-    
+    document.getElementById("demo").innerHTML = array;
     return array;
 }
 
 function numOfBars(){
     x = document.getElementById("myRange").value;
-    document.getElementById("demo").innerHTML = x;
-    document.getElementById("bars").innerHTML = bars;
+    //document.getElementById("demo").innerHTML = x;
+    var val = x.value;
+
+    setUp(val);
 
 }
 
