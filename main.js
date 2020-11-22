@@ -7,78 +7,64 @@ selected.addEventListener("click", () => {
 })
 
 //Global
-const array = [];
+var array = [];
+var svg;
+var svgElement;
+const svgWidth = 500;
+const svgHeight = 400;
+var barPadding;
+var barWidth;
 
-function randomNumArray(min, max){
+function randomNum(min, max) {
 
     return (Math.floor(Math.random() * (max - min + 1) + min));
 
 }
 
-function setUp(x){
-    //generates array of random number
-    x = document.getElementById("myRange").value;
-    //const array = [];
-    for (let i = 0; i < x; i++){
-        array.push(randomNumArray(5,10))
+function setUp(x) {
+    // make array
+    array = [];
+    for (let i = 0; i < x; i++) {
+        array.push(randomNum(5, 350))
     }
-    document.getElementById("demo").innerHTML = array;
-    return array;
-}
 
-function numOfBars(){
-    //setUp function generates array
-    //numOfBars function changes the array everytime slider is moved. 
-    x = document.getElementById("myRange").value;
-    var val = x.value;
-    setUp(val);
+    // make box
+    svg = d3.select('svg')
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+    svgElement = document.getElementById("svg");
+
+    // determine padding
+    paddingAndWidth = svgWidth / array.length;
+    barPadding = paddingAndWidth / 5;
+    barWidth = paddingAndWidth - barPadding;
+
+    barWidth = (svgWidth / array.length) - barPadding;
+    // set up bars
     displayBars();
-
 }
 
+function displayBars() {
+    // clean up bars
+    while (svgElement.hasChildNodes()) {
+        svgElement.removeChild(svgElement.firstChild);
+    }
 
-document.getElementById("demo").innerHTML = setUp();
-
-
-function displayBars(){
-
-   // var svgWidth = svg.attr("width");
-   // var svgHeight = svg.attr("height");
-    var svgWidth = 500;
-    var svgHeight = 300;
-   var barPadding = 5;
-    var barWidth = (svgWidth / array.length);
-   /* var xScale = d3.scaleBand()
-        .domain(d3.range(array.length))
-        .rangeRound([50, svgWidth - 5]).padding(0.4);
-    var yScale = d3.scaleLinear()
-        .domain(d3.extend(array))
-        .range ([30, svgHeight - 30]);
-
-*/
-var dataset = [80, 100, 56, 120, 180, 30, 40, 120, 160];
-
-    var svg = d3.select('svg')
-       .attr("width", svgWidth)
-       .attr("height", svgHeight);
-
+    // add the bars
     var barChart = svg.selectAll("rect")
-        .data(dataset)
+        .data(array)
         .enter()
         .append("rect")
-        .attr("y", function(d){
+        .attr("y", function(d) {
             return svgHeight - 10 - d;
-        }) 
-        .attr("height", function(d){
+        })
+        .attr("height", function(d) {
             return d;
         })
-        .attr("width", barWidth - barPadding)
-        .attr("transform", function(d,i){
-            var translate = [barWidth * i, 0];
-            return "translate(" + translate +")";
+        .attr("width", barWidth)
+        .attr("transform", function(d, i) {
+            var translate = [(barWidth + barPadding) * i, 0];
+            return "translate(" + translate + ")";
         });
 }
-
-
-
-

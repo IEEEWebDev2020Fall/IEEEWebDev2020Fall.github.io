@@ -6,7 +6,8 @@
     <title>Sorting Algorithms</title>
 </head>
 <script src="https://d3js.org/d3.v6.min.js"></script>
-<body>
+
+<body onload="setUp(15)">
     <div class="container">
         <div class="logo">
             <img class="logoGif" src="logo.gif">
@@ -26,8 +27,8 @@
                     Array Size
                 </div>
                 <div class="slider">
-                    <input onload="setup(this.value)" oninput="numOfBars()"type="range"  mix="0" max = "100" id = "myRange" value="3">
-                   
+                    <input oninput="setUp(this.value)" type="range" mix="0" max="100" id="myRange" value="15">
+
                 </div>
             </div>
             <div class="algorithm-control">
@@ -59,18 +60,16 @@
                 </div>
             </div>
         </div>
-        
-            <button  class="btn" type="button">Pause</button>
-            <button  class="btn" type="button">Forward</button>
-        
+
+        <button class="btn" type="button">Pause</button>
+        <button class="btn" type="button">Forward</button>
+
     </div>
     <div class="arrayContainer">
-       <div class="barContainer">
-            <svg height="400" width="100"></svg>
-
-        <h1 id="demo" >  </h1> 
-        
-    </div>    
+        <div class="barContainer">
+            <svg id="svg"></svg>
+        </div>
+    </div>
 
     <script src="main.js"></script>
 </body>
