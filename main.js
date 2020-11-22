@@ -1,9 +1,17 @@
 const selected = document.querySelector(".selected");
 const optionsContainer = document.querySelector(".options-container");
-const optionsList = document.querySelectorAll(".options");
+const optionsList = document.querySelectorAll(".option");
+const playPauseButton = document.querySelector(".button");
 
 selected.addEventListener("click", () => {
     optionsContainer.classList.toggle("active")
+})
+
+optionsList.forEach(o => {
+    o.addEventListener("click", () => {
+        selected.innerHTML = o.querySelector("label").innerHTML
+        optionsContainer.classList.toggle("active")
+    })
 })
 
 //Global
@@ -57,7 +65,7 @@ function displayBars() {
         .enter()
         .append("rect")
         .attr("y", function(d) {
-            return svgHeight - 10 - d;
+            return svgHeight - d;
         })
         .attr("height", function(d) {
             return d;
@@ -67,4 +75,8 @@ function displayBars() {
             var translate = [(barWidth + barPadding) * i, 0];
             return "translate(" + translate + ")";
         });
+}
+
+function playAndPauseClicked() {
+    playPauseButton.classList.toggle("paused")
 }

@@ -7,11 +7,10 @@
 </head>
 <script src="https://d3js.org/d3.v6.min.js"></script>
 
-<body onload="setUp(15)">
+<body onload="setUp(50)">
     <div class="container">
         <div class="logo">
-            <img class="logoGif" src="logo.gif">
-            <!--Logo Placeholder-->
+            <img class="logoGif" src="Assets/logo.gif">
         </div>
         <div class="controls">
             <div class="speed-control">
@@ -27,7 +26,7 @@
                     Array Size
                 </div>
                 <div class="slider">
-                    <input oninput="setUp(this.value)" type="range" mix="0" max="100" id="myRange" value="15">
+                    <input oninput="setUp(this.value)" type="range" min="10" max="150" id="myRange" value="50">
 
                 </div>
             </div>
@@ -59,11 +58,8 @@
                     </div>
                 </div>
             </div>
+            <button onclick="playAndPauseClicked()" class="button"></button>
         </div>
-
-        <button class="btn" type="button">Pause</button>
-        <button class="btn" type="button">Forward</button>
-
     </div>
     <div class="arrayContainer">
         <div class="barContainer">
