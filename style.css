@@ -91,6 +91,15 @@ body {
     border-radius: 50%;
 }
 
+.container .slider input::-moz-range-thumb {
+    -moz-appearance: none;
+    border: none;
+    width: 15px;
+    height: 15px;
+    background-color: rgb(78, 169, 255);
+    border-radius: 50%;
+}
+
 
 /* Dropdown Box */
 
