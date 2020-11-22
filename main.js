@@ -1,7 +1,18 @@
+//Global
 const selected = document.querySelector(".selected");
 const optionsContainer = document.querySelector(".options-container");
 const optionsList = document.querySelectorAll(".option");
+
 const playPauseButton = document.querySelector(".button");
+const arrayContainer = document.querySelector(".arrayContainer")
+
+var array = [];
+var svg;
+var svgElement;
+const svgWidth = 500;
+const svgHeight = 400;
+var barPadding;
+var barWidth;
 
 selected.addEventListener("click", () => {
     optionsContainer.classList.toggle("active")
@@ -13,15 +24,6 @@ optionsList.forEach(o => {
         optionsContainer.classList.toggle("active")
     })
 })
-
-//Global
-var array = [];
-var svg;
-var svgElement;
-const svgWidth = 500;
-const svgHeight = 400;
-var barPadding;
-var barWidth;
 
 function randomNum(min, max) {
 
@@ -78,5 +80,10 @@ function displayBars() {
 }
 
 function playAndPauseClicked() {
-    playPauseButton.classList.toggle("paused")
+    playPauseButton.classList.toggle("playing");
+    if (arrayContainer.classList.contains("playing")) {
+        // start sorting
+    } else {
+        // pause sort
+    }
 }

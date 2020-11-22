@@ -191,7 +191,7 @@ body {
     border-style: outset;
 }
 
-.button.paused {
+.button.playing {
     border-style: double;
     border-width: 0px 0 0px 40px;
 }
