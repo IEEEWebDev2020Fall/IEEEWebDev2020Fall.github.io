@@ -1,27 +1,49 @@
 //Global
+const selectBox = document.querySelector(".select-box");
 const selected = document.querySelector(".selected");
 const optionsContainer = document.querySelector(".options-container");
 const optionsList = document.querySelectorAll(".option");
-
 const playPauseButton = document.querySelector(".button");
 const arrayContainer = document.querySelector(".arrayContainer")
+const barContainer = document.querySelector(".barContainer")
+const mySvg = document.querySelector("#svg")
+const sizeSlider = document.querySelector(".size-control input")
 
+const svgWidth = window.innerWidth - 100;
+const svgHeight = 400;
+const svgMargins = 15;
+const barHeightMin = 5;
+const barHeightMax = svgHeight - 15;
+const barPaddingMultiplier = 1 / 5;
 var array = [];
 var svg;
 var svgElement;
-const svgWidth = 500;
-const svgHeight = 400;
 var barPadding;
 var barWidth;
 
-selected.addEventListener("click", () => {
-    optionsContainer.classList.toggle("active")
+barContainer.style.width = (svgWidth + svgMargins * 2) + "px";
+barContainer.style.height = (svgHeight + svgMargins * 2) + "px";
+arrayContainer.style.width = (svgWidth + svgMargins * 2) + "px";
+mySvg.style.margin = svgMargins + "px";
+sizeSlider.max = svgWidth / 3;
+sizeSlider.value = (parseInt(sizeSlider.min) + parseInt(sizeSlider.max)) / 3;
+
+selectBox.addEventListener("mouseover", () => {
+    if (!optionsContainer.classList.contains("active")) {
+        optionsContainer.classList.add("active");
+    }
+})
+
+selectBox.addEventListener("mouseout", () => {
+    if (optionsContainer.classList.contains("active")) {
+        optionsContainer.classList.remove("active");
+    }
 })
 
 optionsList.forEach(o => {
     o.addEventListener("click", () => {
-        selected.innerHTML = o.querySelector("label").innerHTML
-        optionsContainer.classList.remove("active")
+        selected.innerHTML = o.querySelector("label").innerHTML;
+        optionsContainer.classList.remove("active");
     })
 })
 
@@ -31,11 +53,11 @@ function randomNum(min, max) {
 
 }
 
-function setUp(x) {
+function setUp(x = sizeSlider.value) {
     // make array
     array = [];
     for (let i = 0; i < x; i++) {
-        array.push(randomNum(5, 350))
+        array.push(randomNum(barHeightMin, barHeightMax))
     }
 
     // make box
@@ -47,10 +69,9 @@ function setUp(x) {
 
     // determine padding
     paddingAndWidth = svgWidth / array.length;
-    barPadding = paddingAndWidth / 5;
+    barPadding = paddingAndWidth * barPaddingMultiplier;
     barWidth = paddingAndWidth - barPadding;
 
-    barWidth = (svgWidth / array.length) - barPadding;
     // set up bars
     displayBars();
 }
