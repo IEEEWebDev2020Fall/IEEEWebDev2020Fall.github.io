@@ -72,7 +72,7 @@
  const barHeightMin = 5;
  const barHeightMax = svgHeight - 15;
  const barPaddingMultiplier = 1 / 5;
- var doesNeedRefresh = false;
+ //  var doesNeedRefresh = false;
  var array = [];
  var animations = [];
  var animationStartingIndex = 0;
@@ -118,6 +118,7 @@
  function setUp(x = sizeSlider.value) {
      // clean up 
      playPauseButton.classList.remove("playing");
+     animationStartingIndex = 0;
      array = [];
      animations = [];
      for (let i = timers.length - 1; i >= 0; i--) {
@@ -174,13 +175,17 @@
  function playAndPauseClicked() {
      playPauseButton.classList.toggle("playing");
      if (playPauseButton.classList.contains("playing")) {
-         if (doesNeedRefresh) {
-             setUp();
-         }
-
+         // Check if the animation is created already
          if (animations.length === 0) {
              // make animatons
              mergeSort(array.slice(), 0, array.length, animations);
+         } else {
+             // Sorting was paused
+             // If the sorting ended, restart
+             if (animationStartingIndex == animations.length) {
+                 setUp();
+                 mergeSort(array.slice(), 0, array.length, animations);
+             }
          }
 
          // start sorting
@@ -192,7 +197,11 @@
  }
 
  function startPlay() {
-     const beginIndex = animationStartingIndex
+     // Sync button
+     playPauseButton.classList.remove("playing");
+     playPauseButton.classList.add("playing");
+     // Start from where it left off
+     const beginIndex = animationStartingIndex;
      for (let i = beginIndex; i < animations.length; i++) {
          const bars = document.querySelectorAll("rect");
          const isComparison = i % 3 !== 2;
@@ -214,8 +223,6 @@
                  bar1.setAttribute("y", svgHeight - newHeight);
                  animationStartingIndex++;
                  if (animationStartingIndex >= animations.length) {
-                     animationStartingIndex = 0;
-                     doesNeedRefresh = true;
                      playPauseButton.classList.toggle("playing");
                  }
              }, (i - beginIndex) * 5));
@@ -224,9 +231,10 @@
  }
 
  function pausePlay() {
+     // Sync button
+     playPauseButton.classList.remove("playing");
      for (let i = timers.length - 1; i >= 0; i--) {
          window.clearTimeout(timers[i]);
          timers.pop();
      }
-     doesNeedRefresh = false;
  }
