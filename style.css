@@ -227,10 +227,6 @@ body {
     border-radius: 10px;
 }
 
-#svg {
-    /* margin: 15px; */
-}
-
 rect {
     fill: rgb(78, 169, 255);
 }
