@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.60246324.chunk.css",
-    "main.js": "/static/js/main.ad78e93d.chunk.js",
-    "main.js.map": "/static/js/main.ad78e93d.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8a0d9b9d.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8a0d9b9d.js.map",
-    "static/js/2.4ef1bcc2.chunk.js": "/static/js/2.4ef1bcc2.chunk.js",
-    "static/js/2.4ef1bcc2.chunk.js.map": "/static/js/2.4ef1bcc2.chunk.js.map",
-    "static/js/3.fa44b58b.chunk.js": "/static/js/3.fa44b58b.chunk.js",
-    "static/js/3.fa44b58b.chunk.js.map": "/static/js/3.fa44b58b.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.60246324.chunk.css.map": "/static/css/main.60246324.chunk.css.map",
-    "static/js/2.4ef1bcc2.chunk.js.LICENSE.txt": "/static/js/2.4ef1bcc2.chunk.js.LICENSE.txt",
-    "static/media/logo.a3d7fcde.gif": "/static/media/logo.a3d7fcde.gif"
+    "main.css": "/sorting-algorithms/static/css/main.60246324.chunk.css",
+    "main.js": "/sorting-algorithms/static/js/main.ad78e93d.chunk.js",
+    "main.js.map": "/sorting-algorithms/static/js/main.ad78e93d.chunk.js.map",
+    "runtime-main.js": "/sorting-algorithms/static/js/runtime-main.ad2a182b.js",
+    "runtime-main.js.map": "/sorting-algorithms/static/js/runtime-main.ad2a182b.js.map",
+    "static/js/2.4ef1bcc2.chunk.js": "/sorting-algorithms/static/js/2.4ef1bcc2.chunk.js",
+    "static/js/2.4ef1bcc2.chunk.js.map": "/sorting-algorithms/static/js/2.4ef1bcc2.chunk.js.map",
+    "static/js/3.fa44b58b.chunk.js": "/sorting-algorithms/static/js/3.fa44b58b.chunk.js",
+    "static/js/3.fa44b58b.chunk.js.map": "/sorting-algorithms/static/js/3.fa44b58b.chunk.js.map",
+    "index.html": "/sorting-algorithms/index.html",
+    "static/css/main.60246324.chunk.css.map": "/sorting-algorithms/static/css/main.60246324.chunk.css.map",
+    "static/js/2.4ef1bcc2.chunk.js.LICENSE.txt": "/sorting-algorithms/static/js/2.4ef1bcc2.chunk.js.LICENSE.txt",
+    "static/media/logo.a3d7fcde.gif": "/sorting-algorithms/static/media/logo.a3d7fcde.gif"
   },
   "entrypoints": [
-    "static/js/runtime-main.8a0d9b9d.js",
+    "static/js/runtime-main.ad2a182b.js",
     "static/js/2.4ef1bcc2.chunk.js",
     "static/css/main.60246324.chunk.css",
     "static/js/main.ad78e93d.chunk.js"
