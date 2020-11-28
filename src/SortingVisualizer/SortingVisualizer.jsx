@@ -30,18 +30,12 @@ export default class SortingVisualizer extends Component {
     }
   }
 
-  setUp(x = this.props.arrayLength) {
-    // clean up
+  setUp(completion = null) {
+    // clean up timers
     for (let i = this.state.timers.length - 1; i >= 0; i--) {
       window.clearTimeout(this.state.timers[i]);
       this.state.timers.pop();
     }
-    this.setState({
-      array: [],
-      animationStartingIndex: 0,
-      animations: [],
-      timers: [],
-    });
 
     // set svg frame
     d3.select("svg")
@@ -60,12 +54,20 @@ export default class SortingVisualizer extends Component {
 
     // get random array
     const array = [];
-    for (let i = 0; i < x; i++) {
+    for (let i = 0; i < this.props.arrayLength; i++) {
       array.push(randomNum(this.props.barHeightMin, this.props.barHeightMax));
     }
-    this.setState({
-      array: array,
-    });
+
+    // set array and clean up
+    this.setState(
+      {
+        array: array,
+        animations: [],
+        animationStartingIndex: 0,
+        timers: [],
+      },
+      completion
+    );
 
     // clean up bar color
     const bars = document.querySelectorAll("rect");
@@ -89,16 +91,19 @@ export default class SortingVisualizer extends Component {
         // Sorting was paused
         // If the sorting ended, restart
         if (this.state.animationStartingIndex == this.state.animations.length) {
-          this.setUp();
-          getMergeSortAnimation(
-            this.state.array.slice(),
-            0,
-            this.state.array.length,
-            this.state.animations
-          );
+          this.setUp(() => {
+            getMergeSortAnimation(
+              this.state.array.slice(),
+              0,
+              this.state.array.length,
+              this.state.animations
+            );
+            console.log(this.state.animations);
+            // start sorting
+            this.startPlay();
+          });
         }
       }
-
       // start sorting
       this.startPlay();
     } else {
@@ -128,6 +133,7 @@ export default class SortingVisualizer extends Component {
       } else {
         this.state.timers.push(
           setTimeout(() => {
+            // console.log(this.state.animations);
             const [bar1Index, newHeight] = this.state.animations[i];
             const bar1 = bars[bar1Index];
             bar1.setAttribute("height", newHeight);
