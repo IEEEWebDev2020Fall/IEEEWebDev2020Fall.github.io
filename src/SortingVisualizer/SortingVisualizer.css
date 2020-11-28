@@ -1,0 +1,17 @@
+
+/* Array */
+
+.arrayContainer {
+    margin: 100px auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.barContainer {
+    background-color: rgb(9, 16, 34);
+    border-radius: 10px;
+}
+
+rect {
+    fill: rgb(78, 169, 255);
+}
