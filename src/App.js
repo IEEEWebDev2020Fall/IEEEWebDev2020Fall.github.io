@@ -3,26 +3,26 @@ import "./App.css";
 import Header from "./Header/Header";
 import SortingVisualizer from "./SortingVisualizer/SortingVisualizer";
 
-// const svgWidth = window.innerWidth - 100;
 const svgHeight = 400;
 const svgMargins = 15;
 const barHeightMin = 5;
 const barHeightMax = svgHeight - 15;
 const barPaddingMultiplier = 1 / 5;
-// const arrayLength = 100
+const barMinWidth = 15;
 
 export default class App extends Component {
   state = {
     svgWidth: window.innerWidth - 100,
-    sliderMax: [window.innerWidth - 100] / 6,
+    sliderMax: [window.innerWidth - 100] / barMinWidth,
     sliderMin: 10,
     arrayLength: Math.floor(
-      (parseInt(10) + parseInt([window.innerWidth - 100] / 6)) / 3
+      (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 3
     ),
     sliderDefault: Math.floor(
-      (parseInt(10) + parseInt([window.innerWidth - 100] / 6)) / 3
+      (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 3
     ),
     isPlaying: false,
+    algorithmSelected: "0",
   };
 
   arraySizeChanged = (size) => {
@@ -30,6 +30,15 @@ export default class App extends Component {
     this.setState({
       arrayLength: parseInt(size),
     });
+  };
+
+  algorithmChanged = (id) => {
+    if (id !== this.state.algorithmSelected) {
+      this.setState({
+        algorithmSelected: id,
+        isPlaying: false,
+      });
+    }
   };
 
   playAndPauseClicked = (setTo) => {
@@ -49,6 +58,7 @@ export default class App extends Component {
       <div className="App">
         <Header
           arraySizeChanged={this.arraySizeChanged}
+          algorithmChanged={this.algorithmChanged}
           sliderMax={this.state.sliderMax}
           sliderMin={this.state.sliderMin}
           sliderDefault={this.state.sliderDefault}
@@ -63,8 +73,8 @@ export default class App extends Component {
           barHeightMax={barHeightMax}
           barPaddingMultiplier={barPaddingMultiplier}
           arrayLength={this.state.arrayLength}
+          algorithmSelected={this.state.algorithmSelected}
           isPlaying={this.state.isPlaying}
-          playAndPauseClicked={this.playAndPauseClicked}
           pausePlay={this.pausePlay}
         />
       </div>

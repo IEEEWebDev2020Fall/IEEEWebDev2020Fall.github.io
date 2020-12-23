@@ -1,27 +1,28 @@
 import React, { Component } from "react";
 import "./Header.css";
-import logo from "../Assets/logo.gif";
+import logo from "../Assets/logo.png";
 import PropTypes from "prop-types";
 
 export default class Header extends Component {
   state = {
     isDropDownActive: false,
-    selectedText: "Selected Algorithm",
+    selectedText: "Merge Sort",
+    selectedId: "0",
     algorithmList: [
       {
-        id: "merge",
+        id: "0",
         title: "Merge Sort",
       },
       {
-        id: "quick",
+        id: "1",
         title: "Quick Sort",
       },
       {
-        id: "bubble",
+        id: "2",
         title: "Bubble Sort",
       },
       {
-        id: "insertion",
+        id: "3",
         title: "Insertion Sort",
       },
     ],
@@ -39,11 +40,13 @@ export default class Header extends Component {
     this.setState({ isDropDownActive: false });
   };
 
-  algorithmSelected = (title) => {
+  algorithmSelected = (title, id) => {
     this.setState({
       selectedText: title,
+      selectedId: id,
       isDropDownActive: false,
     });
+    this.props.algorithmChanged.bind(this, id)();
   };
 
   playAndPauseClicked = (setTo) => {
@@ -99,7 +102,11 @@ export default class Header extends Component {
                   <div
                     key={option.id}
                     className="option"
-                    onClick={this.algorithmSelected.bind(this, option.title)}
+                    onClick={this.algorithmSelected.bind(
+                      this,
+                      option.title,
+                      option.id
+                    )}
                   >
                     <input
                       type="radio"
@@ -126,6 +133,7 @@ export default class Header extends Component {
 
 Header.propTypes = {
   arraySizeChanged: PropTypes.func.isRequired,
+  algorithmChanged: PropTypes.func.isRequired,
   sliderMax: PropTypes.number.isRequired,
   sliderMin: PropTypes.number.isRequired,
   sliderDefault: PropTypes.number.isRequired,

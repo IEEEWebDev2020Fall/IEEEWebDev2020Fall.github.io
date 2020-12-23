@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import "./SortingVisualizer.css";
-import { getMergeSortAnimation } from "../SortingAlgorithms/Algorithms.js";
+import {
+  getMergeSortAnimation,
+  getBubbleSortAnimation,
+} from "../SortingAlgorithms/Algorithms.js";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 
@@ -10,6 +13,8 @@ export default class SortingVisualizer extends Component {
     animations: [],
     animationStartingIndex: 0,
     timers: [],
+    playSpeed: 25,
+    segmentSize: 10,
   };
 
   constructor(props) {
@@ -27,6 +32,9 @@ export default class SortingVisualizer extends Component {
     }
     if (prevProps.isPlaying !== this.props.isPlaying) {
       this.playAndPauseClicked(this.props.isPlaying);
+    }
+    if (prevProps.algorithmSelected !== this.props.algorithmSelected) {
+      this.setUp();
     }
   }
 
@@ -76,28 +84,31 @@ export default class SortingVisualizer extends Component {
     }
   }
 
+  getAnimation() {
+    if (this.props.algorithmSelected === "2") {
+      getBubbleSortAnimation(this.state.array.slice(), this.state.animations);
+    } else {
+      getMergeSortAnimation(
+        this.state.array.slice(),
+        0,
+        this.state.array.length,
+        this.state.animations
+      );
+    }
+  }
+
   playAndPauseClicked(isPlaying) {
     if (isPlaying) {
       // Check if the animation is created already
       if (this.state.animations.length === 0) {
         // make animations
-        getMergeSortAnimation(
-          this.state.array.slice(),
-          0,
-          this.state.array.length,
-          this.state.animations
-        );
+        this.getAnimation();
       } else {
         // Sorting was paused
         // If the sorting ended, restart
         if (this.state.animationStartingIndex == this.state.animations.length) {
           this.setUp(() => {
-            getMergeSortAnimation(
-              this.state.array.slice(),
-              0,
-              this.state.array.length,
-              this.state.animations
-            );
+            this.getAnimation();
             console.log(this.state.animations);
             // start sorting
             this.startPlay();
@@ -113,6 +124,21 @@ export default class SortingVisualizer extends Component {
   }
 
   startPlay() {
+    if (this.props.algorithmSelected === "2") {
+      this.playBubble();
+    } else {
+      this.playMerge();
+    }
+  }
+
+  pausePlay() {
+    for (let i = this.state.timers.length - 1; i >= 0; i--) {
+      window.clearTimeout(this.state.timers[i]);
+      this.state.timers.pop();
+    }
+  }
+
+  playMerge() {
     // Start from where it left off
     const beginIndex = this.state.animationStartingIndex;
     for (let i = beginIndex; i < this.state.animations.length; i++) {
@@ -128,12 +154,11 @@ export default class SortingVisualizer extends Component {
             bar1.style.fill = color;
             bar2.style.fill = color;
             this.state.animationStartingIndex++;
-          }, (i - beginIndex) * 5)
+          }, (i - beginIndex) * this.state.playSpeed)
         );
       } else {
         this.state.timers.push(
           setTimeout(() => {
-            // console.log(this.state.animations);
             const [bar1Index, newHeight] = this.state.animations[i];
             const bar1 = bars[bar1Index];
             bar1.setAttribute("height", newHeight);
@@ -144,16 +169,64 @@ export default class SortingVisualizer extends Component {
             ) {
               this.props.pausePlay();
             }
-          }, (i - beginIndex) * 5)
+          }, (i - beginIndex) * this.state.playSpeed)
         );
       }
     }
   }
 
-  pausePlay() {
-    for (let i = this.state.timers.length - 1; i >= 0; i--) {
-      window.clearTimeout(this.state.timers[i]);
-      this.state.timers.pop();
+  playBubble() {
+    let beginIndex = this.state.animationStartingIndex;
+    let timerIterator = beginIndex;
+    const numSegments =
+      (this.state.animations.length - beginIndex) / this.state.segmentSize;
+    for (
+      let i = beginIndex;
+      i < this.state.segmentSize + beginIndex &&
+      i < this.state.animations.length;
+      i++
+    ) {
+      const [isSwap, index] = this.state.animations[i];
+      const bars = document.querySelectorAll("rect");
+      const bar1 = bars[index];
+      const bar2 = bars[index + 1];
+      this.state.timers.push(
+        setTimeout(() => {
+          bar1.style.fill = "red";
+          bar2.style.fill = "red";
+        }, (timerIterator - beginIndex) * this.state.playSpeed)
+      );
+      console.log((timerIterator - beginIndex) * this.state.playSpeed);
+      this.state.timers.push(
+        setTimeout(() => {
+          if (isSwap) {
+            const bar1Height = bar1.getAttribute("height");
+            const bar2Height = bar2.getAttribute("height");
+            bar1.setAttribute("height", bar2Height);
+            bar1.setAttribute("y", this.props.svgHeight - bar2Height);
+            bar2.setAttribute("height", bar1Height);
+            bar2.setAttribute("y", this.props.svgHeight - bar1Height);
+          } else {
+            bar1.style.fill = "green";
+            bar2.style.fill = "green";
+          }
+        }, (timerIterator - beginIndex + 1) * this.state.playSpeed)
+      );
+      this.state.timers.push(
+        setTimeout(() => {
+          bar1.style.fill = "rgb(78, 169, 255)";
+          bar2.style.fill = "rgb(78, 169, 255)";
+          this.state.animationStartingIndex++;
+          if (
+            this.state.animationStartingIndex >= this.state.animations.length
+          ) {
+            this.props.pausePlay();
+          } else if (i >= this.state.segmentSize + beginIndex - 1) {
+            this.playBubble();
+          }
+        }, (timerIterator - beginIndex + 2) * this.state.playSpeed)
+      );
+      timerIterator += 3;
     }
   }
 
@@ -208,6 +281,9 @@ SortingVisualizer.propTypes = {
   barHeightMax: PropTypes.number.isRequired,
   barPaddingMultiplier: PropTypes.number.isRequired,
   arrayLength: PropTypes.number.isRequired,
+  algorithmSelected: PropTypes.string.isRequired,
+  isPlaying: PropTypes.bool.isRequired,
+  pausePlay: PropTypes.func.isRequired,
 };
 
 function randomNum(min, max) {

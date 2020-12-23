@@ -41,11 +41,11 @@ const merge = (
       array[startIndex + leftCopied] <
       array[startIndex + leftArraySize + rightCopied]
     ) {
-      // Add overide animation
+      // Add override animation
       animations.push([startIndex + copied, array[startIndex + leftCopied]]);
       tempArr[copied++] = array[startIndex + leftCopied++];
     } else {
-      // Add overide animation
+      // Add override animation
       animations.push([
         startIndex + copied,
         array[startIndex + leftArraySize + rightCopied],
@@ -81,3 +81,19 @@ const merge = (
     array[i + startIndex] = tempArr[i];
   }
 };
+
+// Bubble Sort
+export function getBubbleSortAnimation(array, animations) {
+  for (let i = 0; i < array.length - 1; i++) {
+    for (let j = 0; j < array.length - i - 1; j++) {
+      if (array[j] > array[j + 1]) {
+        const temp = array[j];
+        array[j] = array[j + 1];
+        array[j + 1] = temp;
+        animations.push([true, j]);
+      } else {
+        animations.push([false, j]);
+      }
+    }
+  }
+}
