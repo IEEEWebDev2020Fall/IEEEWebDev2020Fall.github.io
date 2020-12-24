@@ -91,7 +91,11 @@ export function getBubbleSortAnimation(array, animations) {
         array[j] = array[j + 1];
         array[j + 1] = temp;
         animations.push([true, j]);
+        animations.push([true, j]);
+        animations.push([true, j]);
       } else {
+        animations.push([false, j]);
+        animations.push([false, j]);
         animations.push([false, j]);
       }
     }

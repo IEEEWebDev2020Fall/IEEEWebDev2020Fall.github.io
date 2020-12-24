@@ -8,7 +8,7 @@ const svgMargins = 15;
 const barHeightMin = 5;
 const barHeightMax = svgHeight - 15;
 const barPaddingMultiplier = 1 / 5;
-const barMinWidth = 15;
+const barMinWidth = 5;
 
 export default class App extends Component {
   state = {
