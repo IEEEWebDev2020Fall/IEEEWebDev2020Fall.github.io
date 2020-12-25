@@ -15,6 +15,8 @@ export default class SortingVisualizer extends Component {
     timers: [],
     playSpeed: 25,
     segmentSize: 10,
+    barDefaultColor: "rgb(78, 169, 255)",
+    barCompareColor: "rgb(255, 114, 20)",
   };
 
   constructor(props) {
@@ -80,7 +82,7 @@ export default class SortingVisualizer extends Component {
     // clean up bar color
     const bars = document.querySelectorAll("rect");
     for (let i = 0; i < bars.length; i++) {
-      bars[i].style.fill = "rgb(78, 169, 255)";
+      bars[i].style.fill = this.state.barDefaultColor;
     }
   }
 
@@ -109,7 +111,6 @@ export default class SortingVisualizer extends Component {
         if (this.state.animationStartingIndex == this.state.animations.length) {
           this.setUp(() => {
             this.getAnimation();
-            console.log(this.state.animations);
             // start sorting
             this.startPlay();
           });
@@ -153,7 +154,8 @@ export default class SortingVisualizer extends Component {
         const [bar1Index, bar2Index] = this.state.animations[i];
         const bar1 = bars[bar1Index];
         const bar2 = bars[bar2Index];
-        const color = i % 3 === 0 ? "red" : "rgb(78, 169, 255)";
+        const color =
+          i % 3 === 0 ? this.state.barCompareColor : this.state.barDefaultColor;
         this.state.timers.push(
           setTimeout(() => {
             bar1.style.fill = color;
@@ -187,7 +189,6 @@ export default class SortingVisualizer extends Component {
 
   playBubble() {
     let beginIndex = this.state.animationStartingIndex;
-    console.log(beginIndex);
     for (
       let i = beginIndex;
       i < this.state.segmentSize + beginIndex &&
@@ -201,9 +202,8 @@ export default class SortingVisualizer extends Component {
       if (i % 3 === 0) {
         this.state.timers.push(
           setTimeout(() => {
-            console.log("here1");
-            bar1.style.fill = "red";
-            bar2.style.fill = "red";
+            bar1.style.fill = this.state.barCompareColor;
+            bar2.style.fill = this.state.barCompareColor;
             this.state.animationStartingIndex++;
             if (i >= this.state.segmentSize + beginIndex - 1) {
               this.playBubble();
@@ -213,7 +213,6 @@ export default class SortingVisualizer extends Component {
       } else if (i % 3 === 1) {
         this.state.timers.push(
           setTimeout(() => {
-            console.log("here2");
             if (isSwap) {
               const bar1Height = bar1.getAttribute("height");
               const bar2Height = bar2.getAttribute("height");
@@ -234,9 +233,8 @@ export default class SortingVisualizer extends Component {
       } else {
         this.state.timers.push(
           setTimeout(() => {
-            console.log("here3");
-            bar1.style.fill = "rgb(78, 169, 255)";
-            bar2.style.fill = "rgb(78, 169, 255)";
+            bar1.style.fill = this.state.barDefaultColor;
+            bar2.style.fill = this.state.barDefaultColor;
             this.state.animationStartingIndex++;
             if (
               this.state.animationStartingIndex >= this.state.animations.length
