@@ -1,3 +1,5 @@
+import { sort } from "d3";
+
 // Merge Sort
 export function getMergeSortAnimation(array, startIndex, size, animations) {
   if (size > 1) {
@@ -43,9 +45,14 @@ const merge = (
     ) {
       // Add override animation
       animations.push([startIndex + copied, array[startIndex + leftCopied]]);
+      animations.push([startIndex + copied, array[startIndex + leftCopied]]);
       tempArr[copied++] = array[startIndex + leftCopied++];
     } else {
       // Add override animation
+      animations.push([
+        startIndex + copied,
+        array[startIndex + leftArraySize + rightCopied],
+      ]);
       animations.push([
         startIndex + copied,
         array[startIndex + leftArraySize + rightCopied],
@@ -58,6 +65,7 @@ const merge = (
     animations.push([startIndex + leftCopied, startIndex + leftCopied]);
     animations.push([startIndex + leftCopied, startIndex + leftCopied]);
     animations.push([startIndex + copied, array[startIndex + leftCopied]]);
+    animations.push([startIndex + copied, array[startIndex + leftCopied]]);
     tempArr[copied++] = array[startIndex + leftCopied++];
   }
 
@@ -69,6 +77,10 @@ const merge = (
     animations.push([
       startIndex + leftArraySize + rightCopied,
       startIndex + leftArraySize + rightCopied,
+    ]);
+    animations.push([
+      startIndex + copied,
+      array[startIndex + leftArraySize + rightCopied],
     ]);
     animations.push([
       startIndex + copied,
@@ -99,5 +111,24 @@ export function getBubbleSortAnimation(array, animations) {
         animations.push([false, j]);
       }
     }
+  }
+}
+
+// Insertion Sort
+export function getInsertionSortAnimation(array, animations) {
+  for (let i = 1; i < array.length; i++) {
+    animations.push([0, 0, i]);
+    let key = array[i];
+    let j = i - 1;
+    while (j >= 0 && array[j] > key) {
+      animations.push([1, 0, j]);
+      animations.push([1, 1, j]);
+      animations.push([1, 2, j]);
+      array[j + 1] = array[j];
+      j--;
+    }
+    array[j + 1] = key;
+    animations.push([2, 0, j]);
+    animations.push([2, 1, j]);
   }
 }

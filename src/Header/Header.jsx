@@ -32,6 +32,10 @@ export default class Header extends Component {
     this.props.arraySizeChanged.bind(this, e.target.value)();
   };
 
+  sortingSpeedChanged = (e) => {
+    this.props.sortingSpeedChanged.bind(this, e.target.value)();
+  };
+
   mouseOverSelectBox = (e) => {
     this.setState({ isDropDownActive: true });
   };
@@ -66,9 +70,10 @@ export default class Header extends Component {
               <input
                 type="range"
                 min="0"
-                max="100"
-                defaultValue="50"
+                max={this.props.speedSliderStepsCount}
+                defaultValue={this.props.speedSliderDefault}
                 step="1"
+                onInput={this.sortingSpeedChanged}
               />
             </div>
           </div>
@@ -79,7 +84,7 @@ export default class Header extends Component {
                 type="range"
                 min={this.props.sliderMin}
                 max={this.props.sliderMax}
-                defaultValue={this.props.sliderDefault}
+                defaultValue={this.props.sizeSliderDefault}
                 step="1"
                 onInput={this.arraySizeChanged}
               />
@@ -133,10 +138,13 @@ export default class Header extends Component {
 
 Header.propTypes = {
   arraySizeChanged: PropTypes.func.isRequired,
+  sortingSpeedChanged: PropTypes.func.isRequired,
   algorithmChanged: PropTypes.func.isRequired,
   sliderMax: PropTypes.number.isRequired,
   sliderMin: PropTypes.number.isRequired,
-  sliderDefault: PropTypes.number.isRequired,
+  sizeSliderDefault: PropTypes.number.isRequired,
+  speedSliderDefault: PropTypes.number.isRequired,
+  speedSliderStepsCount: PropTypes.number.isRequired,
   playAndPauseClicked: PropTypes.func.isRequired,
   isPlaying: PropTypes.bool.isRequired,
 };

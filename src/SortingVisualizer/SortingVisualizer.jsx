@@ -3,6 +3,7 @@ import "./SortingVisualizer.css";
 import {
   getMergeSortAnimation,
   getBubbleSortAnimation,
+  getInsertionSortAnimation,
 } from "../SortingAlgorithms/Algorithms.js";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
@@ -13,10 +14,11 @@ export default class SortingVisualizer extends Component {
     animations: [],
     animationStartingIndex: 0,
     timers: [],
-    playSpeed: 25,
     segmentSize: 10,
     barDefaultColor: "rgb(78, 169, 255)",
     barCompareColor: "rgb(255, 114, 20)",
+    barComparePassedColor: "green",
+    barHighlightColor: "red",
   };
 
   constructor(props) {
@@ -37,6 +39,10 @@ export default class SortingVisualizer extends Component {
     }
     if (prevProps.algorithmSelected !== this.props.algorithmSelected) {
       this.setUp();
+    }
+    if (prevProps.sortingSpeed !== this.props.sortingSpeed) {
+      this.pausePlay();
+      this.startPlay();
     }
   }
 
@@ -87,13 +93,25 @@ export default class SortingVisualizer extends Component {
   }
 
   getAnimation() {
-    if (this.props.algorithmSelected === "2") {
-      getBubbleSortAnimation(this.state.array.slice(), this.state.animations);
-    } else {
+    if (this.props.algorithmSelected === "0") {
       getMergeSortAnimation(
         this.state.array.slice(),
         0,
         this.state.array.length,
+        this.state.animations
+      );
+    } else if (this.props.algorithmSelected === "1") {
+      getMergeSortAnimation(
+        this.state.array.slice(),
+        0,
+        this.state.array.length,
+        this.state.animations
+      );
+    } else if (this.props.algorithmSelected === "2") {
+      getBubbleSortAnimation(this.state.array.slice(), this.state.animations);
+    } else {
+      getInsertionSortAnimation(
+        this.state.array.slice(),
         this.state.animations
       );
     }
@@ -125,10 +143,14 @@ export default class SortingVisualizer extends Component {
   }
 
   startPlay() {
-    if (this.props.algorithmSelected === "2") {
+    if (this.props.algorithmSelected === "0") {
+      this.playMerge();
+    } else if (this.props.algorithmSelected === "1") {
+      this.playMerge();
+    } else if (this.props.algorithmSelected === "2") {
       this.playBubble();
     } else {
-      this.playMerge();
+      this.playInsertion();
     }
   }
 
@@ -148,42 +170,41 @@ export default class SortingVisualizer extends Component {
       i < this.state.animations.length;
       i++
     ) {
-      const bars = document.querySelectorAll("rect");
-      const isComparison = i % 3 !== 2;
-      if (isComparison) {
-        const [bar1Index, bar2Index] = this.state.animations[i];
-        const bar1 = bars[bar1Index];
-        const bar2 = bars[bar2Index];
-        const color =
-          i % 3 === 0 ? this.state.barCompareColor : this.state.barDefaultColor;
-        this.state.timers.push(
-          setTimeout(() => {
+      this.state.timers.push(
+        setTimeout(() => {
+          const bars = document.querySelectorAll("rect");
+          const isComparison = i % 4 !== 2 && i % 4 !== 3;
+          if (isComparison) {
+            const [bar1Index, bar2Index] = this.state.animations[i];
+            const bar1 = bars[bar1Index];
+            const bar2 = bars[bar2Index];
+            const color =
+              i % 4 === 0
+                ? this.state.barCompareColor
+                : this.state.barDefaultColor;
             bar1.style.fill = color;
             bar2.style.fill = color;
-            this.state.animationStartingIndex++;
-            if (i >= this.state.segmentSize + beginIndex - 1) {
-              this.playMerge();
-            }
-          }, (i - beginIndex) * this.state.playSpeed)
-        );
-      } else {
-        this.state.timers.push(
-          setTimeout(() => {
+          } else {
             const [bar1Index, newHeight] = this.state.animations[i];
             const bar1 = bars[bar1Index];
-            bar1.setAttribute("height", newHeight);
-            bar1.setAttribute("y", this.props.svgHeight - newHeight);
-            this.state.animationStartingIndex++;
-            if (
-              this.state.animationStartingIndex >= this.state.animations.length
-            ) {
-              this.props.pausePlay();
-            } else if (i >= this.state.segmentSize + beginIndex - 1) {
-              this.playMerge();
+            if (i % 4 === 2) {
+              bar1.style.fill = this.state.barHighlightColor;
+            } else {
+              bar1.style.fill = this.state.barDefaultColor;
+              bar1.setAttribute("height", newHeight);
+              bar1.setAttribute("y", this.props.svgHeight - newHeight);
             }
-          }, (i - beginIndex) * this.state.playSpeed)
-        );
-      }
+          }
+          this.state.animationStartingIndex++;
+          if (
+            this.state.animationStartingIndex >= this.state.animations.length
+          ) {
+            this.props.pausePlay();
+          } else if (i >= this.state.segmentSize + beginIndex - 1) {
+            this.playMerge();
+          }
+        }, (i - beginIndex + 1) * this.props.sortingSpeed)
+      );
     }
   }
 
@@ -195,24 +216,16 @@ export default class SortingVisualizer extends Component {
       i < this.state.animations.length;
       i++
     ) {
-      const [isSwap, index] = this.state.animations[i];
-      const bars = document.querySelectorAll("rect");
-      const bar1 = bars[index];
-      const bar2 = bars[index + 1];
-      if (i % 3 === 0) {
-        this.state.timers.push(
-          setTimeout(() => {
+      this.state.timers.push(
+        setTimeout(() => {
+          const [isSwap, index] = this.state.animations[i];
+          const bars = document.querySelectorAll("rect");
+          const bar1 = bars[index];
+          const bar2 = bars[index + 1];
+          if (i % 3 === 0) {
             bar1.style.fill = this.state.barCompareColor;
             bar2.style.fill = this.state.barCompareColor;
-            this.state.animationStartingIndex++;
-            if (i >= this.state.segmentSize + beginIndex - 1) {
-              this.playBubble();
-            }
-          }, (i - beginIndex + 1) * this.state.playSpeed)
-        );
-      } else if (i % 3 === 1) {
-        this.state.timers.push(
-          setTimeout(() => {
+          } else if (i % 3 === 1) {
             if (isSwap) {
               const bar1Height = bar1.getAttribute("height");
               const bar2Height = bar2.getAttribute("height");
@@ -221,31 +234,86 @@ export default class SortingVisualizer extends Component {
               bar2.setAttribute("height", bar1Height);
               bar2.setAttribute("y", this.props.svgHeight - bar1Height);
             } else {
-              bar1.style.fill = "green";
-              bar2.style.fill = "green";
+              bar1.style.fill = this.state.barComparePassedColor;
+              bar2.style.fill = this.state.barComparePassedColor;
             }
-            this.state.animationStartingIndex++;
-            if (i >= this.state.segmentSize + beginIndex - 1) {
-              this.playBubble();
-            }
-          }, (i - beginIndex + 1) * this.state.playSpeed)
-        );
-      } else {
-        this.state.timers.push(
-          setTimeout(() => {
+          } else {
             bar1.style.fill = this.state.barDefaultColor;
             bar2.style.fill = this.state.barDefaultColor;
-            this.state.animationStartingIndex++;
-            if (
-              this.state.animationStartingIndex >= this.state.animations.length
-            ) {
-              this.props.pausePlay();
-            } else if (i >= this.state.segmentSize + beginIndex - 1) {
-              this.playBubble();
+          }
+          this.state.animationStartingIndex++;
+          if (
+            this.state.animationStartingIndex >= this.state.animations.length
+          ) {
+            this.props.pausePlay();
+          } else if (i >= this.state.segmentSize + beginIndex - 1) {
+            this.playBubble();
+          }
+        }, (i - beginIndex + 1) * this.props.sortingSpeed)
+      );
+    }
+  }
+
+  playInsertion() {
+    let beginIndex = this.state.animationStartingIndex;
+    for (
+      let i = beginIndex;
+      i < this.state.segmentSize + beginIndex &&
+      i < this.state.animations.length;
+      i++
+    ) {
+      this.state.timers.push(
+        setTimeout(() => {
+          const [animationType, animationNum, index] = this.state.animations[i];
+          const bars = document.querySelectorAll("rect");
+          const bar1 = bars[index];
+          const bar2 = bars[index + 1];
+          if (animationType === 0) {
+            // highlight key bar
+            bar1.style.fill = this.state.barHighlightColor;
+          } else if (animationType === 1) {
+            if (animationNum === 0) {
+              // color bar
+              bar1.style.fill = this.state.barCompareColor;
+            } else if (animationNum === 1) {
+              // swap
+              const bar1Height = bar1.getAttribute("height");
+              const bar2Height = bar2.getAttribute("height");
+              bar1.setAttribute("height", bar2Height);
+              bar1.setAttribute("y", this.props.svgHeight - bar2Height);
+              bar2.setAttribute("height", bar1Height);
+              bar2.setAttribute("y", this.props.svgHeight - bar1Height);
+              bar1.style.fill = this.state.barHighlightColor;
+              bar2.style.fill = this.state.barCompareColor;
+            } else {
+              // color to default
+              bar1.style.fill = this.state.barDefaultColor;
+              bar2.style.fill = this.state.barDefaultColor;
             }
-          }, (i - beginIndex + 1) * this.state.playSpeed)
-        );
-      }
+          } else {
+            if (animationNum === 0) {
+              // color bar
+              if (index >= 0) {
+                bar1.style.fill = this.state.barComparePassedColor;
+              }
+            } else {
+              // color back both bars
+              if (index >= 0) {
+                bar1.style.fill = this.state.barDefaultColor;
+              }
+              bar2.style.fill = this.state.barDefaultColor;
+            }
+          }
+          this.state.animationStartingIndex++;
+          if (
+            this.state.animationStartingIndex >= this.state.animations.length
+          ) {
+            this.props.pausePlay();
+          } else if (i >= this.state.segmentSize + beginIndex - 1) {
+            this.playInsertion();
+          }
+        }, (i - beginIndex + 1) * this.props.sortingSpeed)
+      );
     }
   }
 
@@ -300,6 +368,7 @@ SortingVisualizer.propTypes = {
   barHeightMax: PropTypes.number.isRequired,
   barPaddingMultiplier: PropTypes.number.isRequired,
   arrayLength: PropTypes.number.isRequired,
+  sortingSpeed: PropTypes.number.isRequired,
   algorithmSelected: PropTypes.string.isRequired,
   isPlaying: PropTypes.bool.isRequired,
   pausePlay: PropTypes.func.isRequired,

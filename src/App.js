@@ -9,18 +9,29 @@ const barHeightMin = 5;
 const barHeightMax = svgHeight - 15;
 const barPaddingMultiplier = 1 / 5;
 const barMinWidth = 5;
+const minSpeed = 10;
+const maxSpeed = 200;
+const speedSliderStepsCount = 50;
+const speedSliderStepSize = (maxSpeed - minSpeed) / speedSliderStepsCount;
 
 export default class App extends Component {
   state = {
     svgWidth: window.innerWidth - 100,
     sliderMax: [window.innerWidth - 100] / barMinWidth,
     sliderMin: 10,
+    sortingSpeed:
+      (speedSliderStepsCount - Math.floor(speedSliderStepsCount * 0.75)) *
+        speedSliderStepSize +
+      minSpeed,
     arrayLength: Math.floor(
       (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 3
     ),
-    sliderDefault: Math.floor(
+    sizeSliderDefault: Math.floor(
       (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 3
     ),
+    speedSliderDefault: Math.floor(speedSliderStepsCount * 0.85),
+    speedSliderStepSize: speedSliderStepSize,
+    speedSliderStepsCount: speedSliderStepsCount,
     isPlaying: false,
     algorithmSelected: "0",
   };
@@ -29,6 +40,14 @@ export default class App extends Component {
     this.pausePlay();
     this.setState({
       arrayLength: parseInt(size),
+    });
+  };
+
+  sortingSpeedChanged = (input) => {
+    this.setState({
+      sortingSpeed: Math.floor(
+        (speedSliderStepsCount - input) * speedSliderStepSize + minSpeed
+      ),
     });
   };
 
@@ -58,10 +77,13 @@ export default class App extends Component {
       <div className="App">
         <Header
           arraySizeChanged={this.arraySizeChanged}
+          sortingSpeedChanged={this.sortingSpeedChanged}
           algorithmChanged={this.algorithmChanged}
           sliderMax={this.state.sliderMax}
           sliderMin={this.state.sliderMin}
-          sliderDefault={this.state.sliderDefault}
+          sizeSliderDefault={this.state.sizeSliderDefault}
+          speedSliderDefault={this.state.speedSliderDefault}
+          speedSliderStepsCount={this.state.speedSliderStepsCount}
           playAndPauseClicked={this.playAndPauseClicked}
           isPlaying={this.state.isPlaying}
         />
@@ -73,6 +95,7 @@ export default class App extends Component {
           barHeightMax={barHeightMax}
           barPaddingMultiplier={barPaddingMultiplier}
           arrayLength={this.state.arrayLength}
+          sortingSpeed={this.state.sortingSpeed}
           algorithmSelected={this.state.algorithmSelected}
           isPlaying={this.state.isPlaying}
           pausePlay={this.pausePlay}
