@@ -8,9 +8,9 @@ const svgMargins = 15;
 const barHeightMin = 5;
 const barHeightMax = svgHeight - 15;
 const barPaddingMultiplier = 1 / 5;
-const barMinWidth = 5;
+const barMinWidth = 10;
 const minSpeed = 10;
-const maxSpeed = 200;
+const maxSpeed = 150;
 const speedSliderStepsCount = 50;
 const speedSliderStepSize = (maxSpeed - minSpeed) / speedSliderStepsCount;
 
@@ -24,10 +24,10 @@ export default class App extends Component {
         speedSliderStepSize +
       minSpeed,
     arrayLength: Math.floor(
-      (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 3
+      (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 2
     ),
     sizeSliderDefault: Math.floor(
-      (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 3
+      (parseInt(10) + parseInt([window.innerWidth - 100] / barMinWidth)) / 2
     ),
     speedSliderDefault: Math.floor(speedSliderStepsCount * 0.85),
     speedSliderStepSize: speedSliderStepSize,

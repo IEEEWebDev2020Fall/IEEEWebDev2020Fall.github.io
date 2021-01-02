@@ -41,8 +41,10 @@ export default class SortingVisualizer extends Component {
       this.setUp();
     }
     if (prevProps.sortingSpeed !== this.props.sortingSpeed) {
-      this.pausePlay();
-      this.startPlay();
+      if (this.props.isPlaying) {
+        this.pausePlay();
+        this.startPlay();
+      }
     }
   }
 
