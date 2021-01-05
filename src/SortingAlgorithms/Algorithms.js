@@ -132,3 +132,39 @@ export function getInsertionSortAnimation(array, animations) {
     animations.push([2, 1, j]);
   }
 }
+
+// Quick Sort
+export function getQuickSortAnimation(array, low, high, animations) {
+  if (low < high) {
+    let pi = partition(array, low, high, animations);
+    getQuickSortAnimation(array, low, pi - 1, animations);
+    getQuickSortAnimation(array, pi + 1, high, animations);
+  } else if (high == array.length - 1) {
+    console.log(array);
+  }
+}
+
+const partition = (array, low, high, animations) => {
+  let pivot = array[high];
+  // Color pivot
+  let i = low - 1;
+  for (let j = low; j <= high - 1; j++) {
+    if (array[j] < pivot) {
+      // color
+      i++;
+      if (i != j) {
+        // swap
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    } else {
+      // color
+    }
+  }
+  // swap
+  let temp = array[i + 1];
+  array[i + 1] = array[high];
+  array[high] = temp;
+  return i + 1;
+};

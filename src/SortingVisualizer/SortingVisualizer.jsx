@@ -4,6 +4,7 @@ import {
   getMergeSortAnimation,
   getBubbleSortAnimation,
   getInsertionSortAnimation,
+  getQuickSortAnimation,
 } from "../SortingAlgorithms/Algorithms.js";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
@@ -103,10 +104,10 @@ export default class SortingVisualizer extends Component {
         this.state.animations
       );
     } else if (this.props.algorithmSelected === "1") {
-      getMergeSortAnimation(
+      getQuickSortAnimation(
         this.state.array.slice(),
         0,
-        this.state.array.length,
+        this.state.array.length - 1,
         this.state.animations
       );
     } else if (this.props.algorithmSelected === "2") {
