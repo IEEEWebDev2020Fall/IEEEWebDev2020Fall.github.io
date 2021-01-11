@@ -17,9 +17,11 @@ export default class SortingVisualizer extends Component {
     timers: [],
     segmentSize: 10,
     barDefaultColor: "rgb(78, 169, 255)",
-    barCompareColor: "rgb(255, 114, 20)",
-    barComparePassedColor: "green",
-    barHighlightColor: "red",
+    barOrange: "rgb(255, 114, 20)",
+    barGreen: "green",
+    barRed: "red",
+    barYellow: "rgb(177, 86, 0)",
+    barPurple: "purple",
   };
 
   constructor(props) {
@@ -149,7 +151,7 @@ export default class SortingVisualizer extends Component {
     if (this.props.algorithmSelected === "0") {
       this.playMerge();
     } else if (this.props.algorithmSelected === "1") {
-      this.playMerge();
+      this.playQuick();
     } else if (this.props.algorithmSelected === "2") {
       this.playBubble();
     } else {
@@ -165,6 +167,7 @@ export default class SortingVisualizer extends Component {
   }
 
   playMerge() {
+    console.log("merge sort");
     // Start from where it left off
     const beginIndex = this.state.animationStartingIndex;
     for (
@@ -182,16 +185,14 @@ export default class SortingVisualizer extends Component {
             const bar1 = bars[bar1Index];
             const bar2 = bars[bar2Index];
             const color =
-              i % 4 === 0
-                ? this.state.barCompareColor
-                : this.state.barDefaultColor;
+              i % 4 === 0 ? this.state.barOrange : this.state.barDefaultColor;
             bar1.style.fill = color;
             bar2.style.fill = color;
           } else {
             const [bar1Index, newHeight] = this.state.animations[i];
             const bar1 = bars[bar1Index];
             if (i % 4 === 2) {
-              bar1.style.fill = this.state.barHighlightColor;
+              bar1.style.fill = this.state.barRed;
             } else {
               bar1.style.fill = this.state.barDefaultColor;
               bar1.setAttribute("height", newHeight);
@@ -212,6 +213,7 @@ export default class SortingVisualizer extends Component {
   }
 
   playBubble() {
+    console.log("bubble sort");
     let beginIndex = this.state.animationStartingIndex;
     for (
       let i = beginIndex;
@@ -226,8 +228,8 @@ export default class SortingVisualizer extends Component {
           const bar1 = bars[index];
           const bar2 = bars[index + 1];
           if (i % 3 === 0) {
-            bar1.style.fill = this.state.barCompareColor;
-            bar2.style.fill = this.state.barCompareColor;
+            bar1.style.fill = this.state.barOrange;
+            bar2.style.fill = this.state.barOrange;
           } else if (i % 3 === 1) {
             if (isSwap) {
               const bar1Height = bar1.getAttribute("height");
@@ -237,8 +239,8 @@ export default class SortingVisualizer extends Component {
               bar2.setAttribute("height", bar1Height);
               bar2.setAttribute("y", this.props.svgHeight - bar1Height);
             } else {
-              bar1.style.fill = this.state.barComparePassedColor;
-              bar2.style.fill = this.state.barComparePassedColor;
+              bar1.style.fill = this.state.barGreen;
+              bar2.style.fill = this.state.barGreen;
             }
           } else {
             bar1.style.fill = this.state.barDefaultColor;
@@ -258,6 +260,7 @@ export default class SortingVisualizer extends Component {
   }
 
   playInsertion() {
+    console.log("insertion sort");
     let beginIndex = this.state.animationStartingIndex;
     for (
       let i = beginIndex;
@@ -273,11 +276,11 @@ export default class SortingVisualizer extends Component {
           const bar2 = bars[index + 1];
           if (animationType === 0) {
             // highlight key bar
-            bar1.style.fill = this.state.barHighlightColor;
+            bar1.style.fill = this.state.barRed;
           } else if (animationType === 1) {
             if (animationNum === 0) {
               // color bar
-              bar1.style.fill = this.state.barCompareColor;
+              bar1.style.fill = this.state.barOrange;
             } else if (animationNum === 1) {
               // swap
               const bar1Height = bar1.getAttribute("height");
@@ -286,8 +289,8 @@ export default class SortingVisualizer extends Component {
               bar1.setAttribute("y", this.props.svgHeight - bar2Height);
               bar2.setAttribute("height", bar1Height);
               bar2.setAttribute("y", this.props.svgHeight - bar1Height);
-              bar1.style.fill = this.state.barHighlightColor;
-              bar2.style.fill = this.state.barCompareColor;
+              bar1.style.fill = this.state.barRed;
+              bar2.style.fill = this.state.barOrange;
             } else {
               // color to default
               bar1.style.fill = this.state.barDefaultColor;
@@ -297,7 +300,7 @@ export default class SortingVisualizer extends Component {
             if (animationNum === 0) {
               // color bar
               if (index >= 0) {
-                bar1.style.fill = this.state.barComparePassedColor;
+                bar1.style.fill = this.state.barGreen;
               }
             } else {
               // color back both bars
@@ -314,6 +317,73 @@ export default class SortingVisualizer extends Component {
             this.props.pausePlay();
           } else if (i >= this.state.segmentSize + beginIndex - 1) {
             this.playInsertion();
+          }
+        }, (i - beginIndex + 1) * this.props.sortingSpeed)
+      );
+    }
+  }
+
+  playQuick() {
+    console.log("quick sort");
+    const beginIndex = this.state.animationStartingIndex;
+    for (
+      let i = beginIndex;
+      i < this.state.segmentSize + beginIndex &&
+      i < this.state.animations.length;
+      i++
+    ) {
+      this.state.timers.push(
+        setTimeout(() => {
+          const bars = document.querySelectorAll("rect");
+          const animationType = this.state.animations[i][0];
+          if (animationType === 0) {
+            // color
+            const colorType = this.state.animations[i][1];
+            const index = this.state.animations[i][2];
+            const bar1 = bars[index];
+            let color = this.state.barDefaultColor;
+            if (colorType === 0) {
+              color = this.state.barYellow;
+            } else if (colorType === 1) {
+              color = this.state.barGreen;
+            } else if (colorType === 2) {
+              color = "purple";
+            }
+            bar1.style.fill = color;
+          } else if (animationType === 1) {
+            // swap
+            const index1 = this.state.animations[i][1];
+            const index2 = this.state.animations[i][2];
+            const bar1 = bars[index1];
+            const bar2 = bars[index2];
+            const bar1Height = bar1.getAttribute("height");
+            const bar2Height = bar2.getAttribute("height");
+            const bar1Color = bar1.style.fill;
+            const bar2Color = bar2.style.fill;
+            bar1.setAttribute("height", bar2Height);
+            bar1.setAttribute("y", this.props.svgHeight - bar2Height);
+            bar2.setAttribute("height", bar1Height);
+            bar2.setAttribute("y", this.props.svgHeight - bar1Height);
+            bar1.style.fill = bar2Color;
+            bar2.style.fill = bar1Color;
+          } else {
+            // de-color
+            bars.forEach((bar) => {
+              if (
+                bar.style.fill !== this.state.barDefaultColor &&
+                bar.style.fill !== this.state.barYellow
+              ) {
+                bar.style.fill = this.state.barDefaultColor;
+              }
+            });
+          }
+          this.state.animationStartingIndex++;
+          if (
+            this.state.animationStartingIndex >= this.state.animations.length
+          ) {
+            this.props.pausePlay();
+          } else if (i >= this.state.segmentSize + beginIndex - 1) {
+            this.playQuick();
           }
         }, (i - beginIndex + 1) * this.props.sortingSpeed)
       );

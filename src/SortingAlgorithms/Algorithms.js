@@ -139,30 +139,37 @@ export function getQuickSortAnimation(array, low, high, animations) {
     let pi = partition(array, low, high, animations);
     getQuickSortAnimation(array, low, pi - 1, animations);
     getQuickSortAnimation(array, pi + 1, high, animations);
-  } else if (high == array.length - 1) {
-    console.log(array);
+  } else {
+    animations.push([0, 0, high]);
   }
 }
 
 const partition = (array, low, high, animations) => {
   let pivot = array[high];
   // Color pivot
+  animations.push([0, 0, high]);
   let i = low - 1;
   for (let j = low; j <= high - 1; j++) {
     if (array[j] < pivot) {
       // color
+      animations.push([0, 1, j]);
       i++;
       if (i != j) {
         // swap
+        animations.push([1, i, j]);
         let temp = array[i];
         array[i] = array[j];
         array[j] = temp;
       }
     } else {
       // color
+      animations.push([0, 2, j]);
     }
   }
   // swap
+  animations.push([1, i + 1, high]);
+  // De-color
+  animations.push([2, -1, -1]);
   let temp = array[i + 1];
   array[i + 1] = array[high];
   array[high] = temp;
