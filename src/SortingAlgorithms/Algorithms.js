@@ -98,20 +98,25 @@ const merge = (
 export function getBubbleSortAnimation(array, animations) {
   for (let i = 0; i < array.length - 1; i++) {
     for (let j = 0; j < array.length - i - 1; j++) {
+      let isSwap;
+      let isSorted = false;
       if (array[j] > array[j + 1]) {
         const temp = array[j];
         array[j] = array[j + 1];
         array[j + 1] = temp;
-        animations.push([true, j]);
-        animations.push([true, j]);
-        animations.push([true, j]);
+        isSwap = true;
       } else {
-        animations.push([false, j]);
-        animations.push([false, j]);
-        animations.push([false, j]);
+        isSwap = false;
       }
+      if (j === array.length - i - 2) {
+        isSorted = true;
+      }
+      animations.push([false, j]);
+      animations.push([isSwap, j]);
+      animations.push([isSorted, j]);
     }
   }
+  animations.push([true, 0]);
 }
 
 // Insertion Sort
@@ -139,8 +144,8 @@ export function getQuickSortAnimation(array, low, high, animations) {
     let pi = partition(array, low, high, animations);
     getQuickSortAnimation(array, low, pi - 1, animations);
     getQuickSortAnimation(array, pi + 1, high, animations);
-  } else {
-    animations.push([0, 0, high]);
+  } else if (low === high) {
+    animations.push([0, 3, high]);
   }
 }
 
