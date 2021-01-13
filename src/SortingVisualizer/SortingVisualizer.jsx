@@ -195,7 +195,7 @@ export default class SortingVisualizer extends Component {
             const color2 =
               i % 4 === 0 ? this.state.barOrange : this.state.barDefaultColor;
             bar1.style.fill = color1;
-            bar2.style.fill = color2;
+            bar2.style.fill = bar1Index === bar2Index ? color1 : color2;
           } else {
             const [bar1Index, newHeight, isLastMerge] = this.state.animations[
               i
