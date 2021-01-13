@@ -28,44 +28,73 @@ const merge = (
   var copied = 0;
   var leftCopied = 0;
   var rightCopied = 0;
+  const isLastMerge = rightArraySize + leftArraySize === array.length;
 
   while (leftCopied < leftArraySize && rightCopied < rightArraySize) {
     // Add comparison animation
     animations.push([
       startIndex + leftCopied,
       startIndex + leftArraySize + rightCopied,
+      isLastMerge,
     ]);
     animations.push([
       startIndex + leftCopied,
       startIndex + leftArraySize + rightCopied,
+      isLastMerge,
     ]);
     if (
       array[startIndex + leftCopied] <
       array[startIndex + leftArraySize + rightCopied]
     ) {
       // Add override animation
-      animations.push([startIndex + copied, array[startIndex + leftCopied]]);
-      animations.push([startIndex + copied, array[startIndex + leftCopied]]);
+      animations.push([
+        startIndex + copied,
+        array[startIndex + leftCopied],
+        isLastMerge,
+      ]);
+      animations.push([
+        startIndex + copied,
+        array[startIndex + leftCopied],
+        isLastMerge,
+      ]);
       tempArr[copied++] = array[startIndex + leftCopied++];
     } else {
       // Add override animation
       animations.push([
         startIndex + copied,
         array[startIndex + leftArraySize + rightCopied],
+        isLastMerge,
       ]);
       animations.push([
         startIndex + copied,
         array[startIndex + leftArraySize + rightCopied],
+        isLastMerge,
       ]);
       tempArr[copied++] = array[startIndex + leftArraySize + rightCopied++];
     }
   }
 
   while (leftCopied < leftArraySize) {
-    animations.push([startIndex + leftCopied, startIndex + leftCopied]);
-    animations.push([startIndex + leftCopied, startIndex + leftCopied]);
-    animations.push([startIndex + copied, array[startIndex + leftCopied]]);
-    animations.push([startIndex + copied, array[startIndex + leftCopied]]);
+    animations.push([
+      startIndex + leftCopied,
+      startIndex + leftCopied,
+      isLastMerge,
+    ]);
+    animations.push([
+      startIndex + leftCopied,
+      startIndex + leftCopied,
+      isLastMerge,
+    ]);
+    animations.push([
+      startIndex + copied,
+      array[startIndex + leftCopied],
+      isLastMerge,
+    ]);
+    animations.push([
+      startIndex + copied,
+      array[startIndex + leftCopied],
+      isLastMerge,
+    ]);
     tempArr[copied++] = array[startIndex + leftCopied++];
   }
 
@@ -73,18 +102,22 @@ const merge = (
     animations.push([
       startIndex + leftArraySize + rightCopied,
       startIndex + leftArraySize + rightCopied,
+      isLastMerge,
     ]);
     animations.push([
       startIndex + leftArraySize + rightCopied,
       startIndex + leftArraySize + rightCopied,
+      isLastMerge,
     ]);
     animations.push([
       startIndex + copied,
       array[startIndex + leftArraySize + rightCopied],
+      isLastMerge,
     ]);
     animations.push([
       startIndex + copied,
       array[startIndex + leftArraySize + rightCopied],
+      isLastMerge,
     ]);
     tempArr[copied++] = array[startIndex + leftArraySize + rightCopied++];
   }
@@ -179,4 +212,17 @@ const partition = (array, low, high, animations) => {
   array[i + 1] = array[high];
   array[high] = temp;
   return i + 1;
+};
+
+const assertEqualsArray = (original, sorted) => {
+  let correct = original.slice().sort();
+  if (correct.length !== sorted.length) {
+    return false;
+  }
+  correct.every((element, i) => {
+    if (element !== sorted[i]) {
+      return false;
+    }
+  });
+  return true;
 };

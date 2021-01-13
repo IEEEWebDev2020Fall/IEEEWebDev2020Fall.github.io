@@ -15,7 +15,7 @@ export default class SortingVisualizer extends Component {
     animations: [],
     animationStartingIndex: 0,
     timers: [],
-    segmentSize: 10,
+    segmentSize: 1,
     barDefaultColor: "rgb(78, 169, 255)",
     barOrange: "rgb(255, 114, 20)",
     barGreen: "green",
@@ -181,20 +181,32 @@ export default class SortingVisualizer extends Component {
           const bars = document.querySelectorAll("rect");
           const isComparison = i % 4 !== 2 && i % 4 !== 3;
           if (isComparison) {
-            const [bar1Index, bar2Index] = this.state.animations[i];
+            const [bar1Index, bar2Index, isLastMerge] = this.state.animations[
+              i
+            ];
             const bar1 = bars[bar1Index];
             const bar2 = bars[bar2Index];
-            const color =
+            const color1 =
+              i % 4 === 0
+                ? this.state.barOrange
+                : isLastMerge
+                ? this.state.barSorted
+                : this.state.barDefaultColor;
+            const color2 =
               i % 4 === 0 ? this.state.barOrange : this.state.barDefaultColor;
-            bar1.style.fill = color;
-            bar2.style.fill = color;
+            bar1.style.fill = color1;
+            bar2.style.fill = color2;
           } else {
-            const [bar1Index, newHeight] = this.state.animations[i];
+            const [bar1Index, newHeight, isLastMerge] = this.state.animations[
+              i
+            ];
             const bar1 = bars[bar1Index];
             if (i % 4 === 2) {
               bar1.style.fill = this.state.barRed;
             } else {
-              bar1.style.fill = this.state.barDefaultColor;
+              bar1.style.fill = isLastMerge
+                ? this.state.barSorted
+                : this.state.barDefaultColor;
               bar1.setAttribute("height", newHeight);
               bar1.setAttribute("y", this.props.svgHeight - newHeight);
             }
@@ -300,10 +312,10 @@ export default class SortingVisualizer extends Component {
               bar2.setAttribute("y", this.props.svgHeight - bar1Height);
               bar1.style.fill = this.state.barRed;
               bar2.style.fill = this.state.barOrange;
-            } else {
-              // color to default
-              bar1.style.fill = this.state.barDefaultColor;
-              bar2.style.fill = this.state.barDefaultColor;
+            } else if (animationNum === 2) {
+              // color to sorted
+              bar1.style.fill = this.state.barSorted;
+              bar2.style.fill = this.state.barSorted;
             }
           } else {
             if (animationNum === 0) {
@@ -314,9 +326,9 @@ export default class SortingVisualizer extends Component {
             } else {
               // color back both bars
               if (index >= 0) {
-                bar1.style.fill = this.state.barDefaultColor;
+                bar1.style.fill = this.state.barSorted;
               }
-              bar2.style.fill = this.state.barDefaultColor;
+              bar2.style.fill = this.state.barSorted;
             }
           }
           this.state.animationStartingIndex++;
